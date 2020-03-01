@@ -61,9 +61,17 @@ public class Main {
         int prevElement = tmp[0];
         int currentListIndex = 0;
 
-        List<Integer> startList = new ArrayList<>(1);
-        startList.add(tmp[0]);
-        tmpResult.add(startList);
+
+        if (tmp[0] == target) {
+            List<Integer> startList = new ArrayList<>(1);
+            startList.add(tmp[0]);
+            result.add(startList);
+        } else {
+            List<Integer> startList = new ArrayList<>(1);
+            startList.add(tmp[0]);
+            tmpResult.add(startList);
+        }
+
 
         for (int i = 1; i < tmp.length; i++) {
             currentElement = tmp[i];
