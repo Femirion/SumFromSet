@@ -6,9 +6,9 @@ import java.util.List;
 public class Main {
 
     public static void main(String ... args) {
-        int[] arr = {2, 3, 5};
+        int[] arr = {1};
 
-        combinationSum(arr, 8);
+        System.out.println(combinationSum(arr, 1));
     }
 
 
@@ -67,20 +67,17 @@ public class Main {
 
         for (int i = 1; i < tmp.length; i++) {
             currentElement = tmp[i];
-
-            if (currentElement == target) {
-                List<Integer> t = new ArrayList<>(1);
-                t.add(currentElement);
-                result.add(t);
-                continue;
-            }
-
             List<Integer> currentList = new ArrayList<>(1);
             currentList.add(currentElement);
 
+            if (currentElement == target) {
+                result.add(currentList);
+                continue;
+            }
+
             if (currentElement != prevElement) {
                 listOfSets.clear();
-                for (int k = 0; k < tmpResult.size() -1; k++) {
+                for (int k = 0; k < tmpResult.size(); k++) {
                     List<Integer> t = new ArrayList<>(tmpResult.get(k));
                     // todo sum in memory
                     currentSum = 0;
@@ -92,10 +89,16 @@ public class Main {
                     }
                     if (currentSum + currentElement == target) {
                         t.addAll(currentList);
+                        if (result.contains(t)) {
+                            continue;
+                        }
                         result.add(t);
                         continue;
                     }
                     t.addAll(currentList);
+                    if (tmpResult.contains(t)) {
+                        continue;
+                    }
                     listOfSets.add(t);
                 }
                 tmpResult.addAll(listOfSets);
@@ -108,28 +111,40 @@ public class Main {
 
 
 //            List<Integer> list1 = new ArrayList<>(tmpResult.get(currentListIndex));
-            List<Integer> list1 = new ArrayList<>(tmpResult.get(tmpResult.size() - 1));
+            listOfSets.clear();
+            for (int x = 0; x < tmpResult.size(); x++) {
+                List<Integer> list1 = new ArrayList<>(tmpResult.get(x));
 
-            // todo sum in memory
-            currentSum = 0;
-            for (int m = 0; m < list1.size(); m++) {
-                currentSum = currentSum + list1.get(m);
-            }
-            if (currentSum + currentElement > target) {
-                continue;
-            }
-            if (currentSum + currentElement == target) {
+                // todo sum in memory
+                currentSum = 0;
+                for (int m = 0; m < list1.size(); m++) {
+                    currentSum = currentSum + list1.get(m);
+                }
+                if (currentSum + currentElement > target) {
+                    continue;
+                }
+                if (currentSum + currentElement == target) {
+                    list1.addAll(currentList);
+                    if (result.contains(list1)) {
+                        continue;
+                    }
+                    result.add(list1);
+                    continue;
+                }
+
                 list1.addAll(currentList);
-                result.add(list1);
-                continue;
+                if (tmpResult.contains(list1)) {
+                    continue;
+                }
+
+                listOfSets.add(list1);
+                currentListIndex++;
             }
+            tmpResult.addAll(listOfSets);
 
-            list1.addAll(currentList);
-
-            tmpResult.add(list1);
-            currentListIndex++;
         }
 
         return result;
     }
+
 }
